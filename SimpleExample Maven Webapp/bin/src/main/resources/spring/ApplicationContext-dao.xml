@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.2.xsd   
+						http://www.springframework.org/schema/mvc
+						http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-4.2.xsd   
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-4.2.xsd   
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+						
+	
+	<!-- 加载db.properties属性文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<!-- 配置mybatis数据源的bean -->
+		<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">  
+	        <property name="driverClassName" value="${jdbc.driver}"></property>  
+	        <property name="url" value="${jdbc.url}"></property>  
+	        <property name="username" value="${jdbc.username}"></property>  
+	        <property name="password" value="${jdbc.password}"></property>
+	        <!-- 初始创建连接的个数 -->
+	        <property name="initialSize" value="3"></property>
+	        <!-- 最多连接的个数 -->
+	        <property name="maxTotal" value="20"></property>
+	        <!-- 最少的空闲连接数 -->
+	        <property name="minIdle" value="2"></property>
+	        <!-- 最多的空闲连接数 -->  
+	        <property name="maxIdle" value="5"></property>  
+	        <!-- 最大等待连接时间，单位ms -->
+	        <property name="maxWaitMillis" value="500"></property>  
+	        <property name="defaultAutoCommit" value="true"></property>  
+    	</bean> 
+	
+	<!-- SqlSessionFactory的Bean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 自动扫描包下的mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- basePackage指定要扫描的包，在此包之下的映射器都会被搜索到。可指定多个包，包与包之间用逗号或分号分隔 -->
+		<property name="basePackage" value="cn.wzd.ssm.mapper"></property>
+	</bean>
+			
+</beans>

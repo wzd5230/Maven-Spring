@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wzd.ssm.mapper.ItemsMapperCustom" >
+
+	<!-- 定义Items查询条件的sql片段 -->
+	<sql id="query_items_where">
+		<!-- 判断查询条件的对象是否为空 -->
+		<if test="itemsCustom!=null">
+			<!-- 判断查询条件对象中的name属性是否为null或"" -->
+			<if test="itemsCustom.name!=null and itemsCustom.name!=''">
+				items.name LIKE '%${itemsCustom.name}%'				
+			</if>
+		</if>
+	</sql>
+
+	<!-- 定义findItemsList查询结果到ItemsCustom对象的映射 -->	
+	<resultMap type="ItemsCustom" id="itemsListResultMap">
+		<id column="id" property="id"/>
+		
+		<result column="name" property="name"/>
+		<result column="price" property="price"/>
+		<result column="detail" property="detail"/>
+		<result column="pic" property="pic"/>
+		<result column="createtime" property="createtime"/>
+	</resultMap>
+	
+	
+	<select id="findItemsList" parameterType="cn.wzd.ssm.po.ItemsQueryVo" resultMap="itemsListResultMap">
+	SELECT 
+		items.id AS id,
+		items.name AS name,
+		items.price AS price,
+		items.detail AS detail,
+		items.pic AS pic,
+		items.createtime AS createtime
+	FROM
+		items AS items
+	<where>
+		<include refid="query_items_where"></include>
+	</where>
+	</select>
+ 
+ 
+ 
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- 全局setting，根据需要进行相关的设置，例如二级缓存的开启/关闭、延迟加载的开启/关闭 -->
+	<!-- <settings>
+	
+	</settings> -->
+
+	<!-- 配置类的别名，使用批量的方式 -->
+	<typeAliases>
+		<package name="cn.wzd.ssm.po"/>
+	</typeAliases>
+
+	<!-- 配置mapper，因为在spring和mybatis整合中，使用了mapper扫描，因此这里mapper可以不进行配置。 -->
+	<!-- <mappers>
+	</mappers> -->
+</configuration>
