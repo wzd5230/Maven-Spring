@@ -11,6 +11,7 @@
   
   <modules>
   	<module>SimpleExample Maven Webapp</module>
+  	<module>SpringTest</module>
   </modules>
   
   <properties>
@@ -38,7 +39,11 @@
   	<!-- log4j-core版本 -->
   	<log4j-core-version>2.5</log4j-core-version>
   	<!-- hibernate-validator的版本 -->
-  	<hibernate-validator-version>5.1.3.Final</hibernate-validator-version>
+  	<hibernate-validator-version>5.2.4.Final</hibernate-validator-version>
+  	<!-- jstl标签库的版本 -->
+  	<javax-servlet-jstl-version>1.2</javax-servlet-jstl-version>
+  	<!-- commons-fileupload的版本，该jar包用于文件上传 -->
+  	<commons-fileupload-version>1.3.1</commons-fileupload-version>
   </properties>
   
   <!-- 依赖管理 -->
@@ -238,6 +243,21 @@
 		    <artifactId>hibernate-validator</artifactId>
 		    <version>${hibernate-validator-version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>${javax-servlet-jstl-version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>${commons-fileupload-version}</version>
+		</dependency>
+				
+				
+		
 
 		
 		

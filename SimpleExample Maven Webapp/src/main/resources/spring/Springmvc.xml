@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.2.xsd   
+						http://www.springframework.org/schema/mvc
+						http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-4.2.xsd   
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-4.2.xsd   
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+						
+	<!-- 开启bean组件扫描，扫描controller -->
+	<context:component-scan base-package="cn.wzd.ssm.controller"></context:component-scan>
+	
+	<!-- 加载mvc注解驱动 
+		该标签可以加载org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+		和org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter。
+		并加载和json解析相关的东西（这部分暂时没有学习，不知道是什么东西）
+		conversion-service:使用了自定义参数绑定，因此需要配置实用的转换器
+		validator:使用了校验器，需要进行配置。
+	-->
+	<mvc:annotation-driven conversion-service="conversionService" validator="validator"></mvc:annotation-driven>
+	
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="cn.wzd.ssm.controller.converter.ItemsDateConverter"/>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- 配置试图解析器，并注入属性prefix、suffix，这样可以在程序中填写jsp路径时更加简洁 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!-- 配置hibernate validation校验器 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<!--不设置则默认为classpath下的ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="validatemessageSource" />
+	</bean>
+	<bean id="validatemessageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 资源文件名 -->
+		<property name="basenames">
+			<list>
+				<value>classpath:validatemessages</value>
+			</list>
+		</property>
+		<property name="fileEncodings" value="utf-8" />
+		<property name="cacheSeconds" value="120" />
+	</bean> 
+	
+	
+	<!-- 创建统一异常处理类的bean,因为此类实现了指定的接口（HandlerExceptionResolver），因此可以不写bean name -->
+	<bean class="cn.wzd.ssm.exception.CustomExceptionResolver" />
+	
+	
+	
+	<!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"/>
+		<!-- 指定所上传文件的总大小不能超过200KB。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+		<property name="maxUploadSize" value="204800"/>
+	</bean>
+	
+	<!-- 拦截器的配置（全局） -->
+	<mvc:interceptors>
+		<!-- 配置多个拦截器，则根据配置的顺序进行执行 -->
+		<!-- 日志记录拦截器 -->
+		<mvc:interceptor>
+			<!-- '/**'表示拦截所有的url，'/*'表示只拦截根url，子url不拦截，针对需要拦截全局的Handler的拦截器，使用'/**' -->
+			<mvc:mapping path="/**"/>
+			<bean class="cn.wzd.ssm.interceptor.LogInterceptor"/>
+		</mvc:interceptor>
+		<!-- 登陆认证拦截器 -->
+		<mvc:interceptor>
+			<!-- '/**'表示拦截所有的url，'/*'表示只拦截根url，子url不拦截，针对需要拦截全局的Handler的拦截器，使用'/**' -->
+			<mvc:mapping path="/**"/>
+			<bean class="cn.wzd.ssm.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	
+						
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+

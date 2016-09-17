@@ -2,17 +2,27 @@ package cn.wzd.ssm.po;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import cn.wzd.ssm.controller.validation.SingleItemsEditValidation;
+
 public class Items {
     private Integer id;
 
+    @Size(min=1,max=30,message="{items.name.validation.size.error}",groups={SingleItemsEditValidation.class})
     private String name;
 
     private Float price;
 
     private String pic;
 
+    @NotNull(message="{items.createtime.validation.notNull}",groups={SingleItemsEditValidation.class})
     private Date createtime;
 
+    @NotBlank(message="{items.detail.validation.notBlank}",groups={SingleItemsEditValidation.class})
     private String detail;
 
     public Integer getId() {

@@ -31,6 +31,20 @@
   	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   
+  <!-- 添加过滤器，解决springmvc使用参数绑定时，中文乱码的问题 -->
+  <filter>    
+    <filter-name>Character Encoding</filter-name>    
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>    
+    <init-param>    
+        <param-name>encoding</param-name>    
+        <param-value>UTF-8</param-value>    
+    </init-param>    
+	</filter>    
+	<filter-mapping>    
+	    <filter-name>Character Encoding</filter-name>    
+	    <url-pattern>/*</url-pattern>    
+	</filter-mapping>  
+  
   <!-- 配置前端控制器 -->
   <servlet>
   	<servlet-name>dispatcherServlet</servlet-name>
@@ -39,8 +53,10 @@
   	<init-param>
   		<!-- 配置springmvc的配置文件（配置处理器映射器、处理器适配器），如果没有指定，则默认名为servlet名+“-servlet.xml”文件作为配置文件 -->
   		<param-name>contextConfigLocation</param-name>
-  		<param-value>classpath:spring/ApplicationContext-controller.xml</param-value>
+  		<param-value>classpath:spring/Springmvc.xml</param-value>
   	</init-param>
+  	<!-- 在启动的时候就加载该servlet，优先级为1，0为不加载，大于0整数表示加载顺序，数值越小，优先级越高。 -->
+  	<load-on-startup>1</load-on-startup>
   </servlet>
   
   <!-- 配置前端控制器的映射 -->
@@ -55,10 +71,10 @@
   </servlet-mapping>
   
   
-  <error-page>
+<!--   <error-page>
   	<error-code>404</error-code>
   	<location>/jsp/errorpage/error_404.jsp</location>
-  </error-page>
+  </error-page> -->
 
   <display-name>Welcome to wzd</display-name>
   <description>

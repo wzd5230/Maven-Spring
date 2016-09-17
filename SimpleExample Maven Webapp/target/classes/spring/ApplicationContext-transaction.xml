@@ -27,7 +27,25 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
-	<!-- 这部分内容不懂 -->
+	<!--  以下内容根据http://www.springframework.org/schema/tx/spring-tx-4.2.xsd文件中的注释进行分析。
+		tx:advice:配置spring的事务管理
+		transaction-manager:定义了PlatformTransactionManager接口实现类的bean的name，如果该bean name为transactionManager，
+				则可以不指定该属性，如果bean name不是transactionManager，则需要通过transaction-manager进行指定。
+		===以下为attributes标签下的属性===
+		method:与该事务属性关联的方法名，方法名可以使用通配符*。
+		propagation：事务的的传播行为，选择值有7个，分别为：REQUIRED、SUPPORTS、MANDATORY、REQUIRES_NEW、
+				NOT_SUPPORTED、NEVER、NESTED，默认值为REQUIRED。
+		isolation：事务的隔离级别，默认值为DEFAULT,可选值有5个，分别为：
+						DEFAULT：默认值，使用底层数据存储的隔离级别。
+						READ_UNCOMMITTED:产生脏读、不可重复读、幻读
+						READ_COMMITTED:产生不可重复读、幻读
+						REPEATABLE_READ:产生幻读
+						SERIALIZABLE:
+		timeout：事务的超时，秒为单位
+		read-only：指定事务是否是只读
+		rollback-for:指定将会触发回滚的异常类型，比如：'com.foo.MyBusinessException,ServletException'
+		no-rollback-for:指定忽略出发回滚的异常类型
+	 -->
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="save*" propagation="REQUIRED"/>
@@ -40,11 +58,13 @@
 		</tx:attributes>
 	</tx:advice>
 	
+	
 	<!-- 这部分内容不懂 -->
 	<aop:config>
+		<!-- In Spring, an Advisor is an aspect that contains just a single advice object associated with a pointcut
+		expression. -->
 		<aop:advisor advice-ref="txAdvice" pointcut="execution(* cn.wzd.ssm.service.impl.*.*(..))"/>
 	</aop:config>
-	
 	
 	
 
